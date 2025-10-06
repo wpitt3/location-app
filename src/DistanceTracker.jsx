@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, Navigation, Clock, Target } from 'lucide-react';
 
-export default function DistanceTracker({targetLat, targetLon, updateInterval}) {
+export default function DistanceTracker({targetLat, targetLon, updateInterval=5}) {
     const [userLat, setUserLat] = useState(null);
     const [userLon, setUserLon] = useState(null);
     const [distance, setDistance] = useState(null);
+    const [distanceDelta, setDistanceDelta] = useState(0);
     const [error, setError] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
     const intervalRef = useRef(null);
-
-
-    // const [targetLat, setTargetLat] = useState(51.5074);
-    // const [targetLon, setTargetLon] = useState(-0.1278);
-    // const [updateInterval, setUpdateInterval] = useState(5);
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
         const R = 6371e3;
@@ -34,9 +30,10 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval}) 
                 (position) => {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
+                    const dist = calculateDistance(lat, lon, targetLat, targetLon);
+                    setDistanceDelta(distance - dist)
                     setUserLat(lat);
                     setUserLon(lon);
-                    const dist = calculateDistance(lat, lon, targetLat, targetLon);
                     setDistance(dist);
                     setLastUpdate(new Date());
                     setError(null);
@@ -85,7 +82,7 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval}) 
                         {distance !== null && (
                             <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200">
                                 <p className="text-4xl font-bold text-green-700 mb-2">
-                                    {distance.toFixed(2)} m
+                                    {distance.toFixed(2)} m ({distanceDelta.toFixed(2)} m)
                                 </p>
                                 {lastUpdate && (
                                     <p className="text-xs text-gray-500 mt-3">
