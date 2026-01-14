@@ -6,8 +6,10 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval=5}
     const [userLon, setUserLon] = useState(null);
     const [distance, setDistance] = useState(null);
     const [distanceDelta, setDistanceDelta] = useState(0);
+    const [bearing, setBearing] = useState(null);
     const [error, setError] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
+    const [atLocation, setAtLocation] = useState(false);
     const intervalRef = useRef(null);
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -24,6 +26,27 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval=5}
         return R * c;
     };
 
+    const calculateBearing = (lat1, lon1, lat2, lon2) => {
+        const φ1 = lat1 * Math.PI / 180;
+        const φ2 = lat2 * Math.PI / 180;
+        const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+        const y = Math.sin(Δλ) * Math.cos(φ2);
+        const x = Math.cos(φ1) * Math.sin(φ2) -
+            Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+        const θ = Math.atan2(y, x);
+        const bearing = (θ * 180 / Math.PI + 360) % 360;
+
+        return bearing;
+    };
+
+    const getCompassDirection = (bearing) => {
+        const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
+            'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+        const index = Math.round(bearing / 22.5) % 16;
+        return directions[index];
+    };
+
     const updateLocation = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -31,10 +54,13 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval=5}
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
                     const dist = calculateDistance(lat, lon, targetLat, targetLon);
-                    setDistanceDelta(distance - dist)
+                    const bear = calculateBearing(lat, lon, targetLat, targetLon);
+                    setBearing(bear);
+                    setDistanceDelta((distance || dist) - dist)
                     setUserLat(lat);
                     setUserLon(lon);
                     setDistance(dist);
+                    setAtLocation(dist < 10)
                     setLastUpdate(new Date());
                     setError(null);
                 },
@@ -91,7 +117,19 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval=5}
                                 )}
                             </div>
                         )}
-
+                        {bearing !== null && (
+                            <div className="mt-4 pt-4 border-t border-green-200">
+                                <p className="text-sm text-gray-600 mb-1">Direction to target:</p>
+                                <p className="text-2xl font-bold text-green-700">
+                                    {getCompassDirection(bearing)} ({bearing.toFixed(1)}°)
+                                </p>
+                            </div>
+                        )}
+                        {atLocation && (
+                            <div className="mt-4 pt-4 border-t border-green-200">
+                                <p className="text-sm text-gray-600 mb-1">You have arrived</p>
+                            </div>
+                        )}
                         {userLat && userLon && (
                             <div className="bg-gray-50 rounded-xl p-4">
                                 <h3 className="text-sm font-semibold text-gray-600 mb-2">Your Location</h3>
