@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MapPin, Navigation, Clock, Target } from 'lucide-react';
 
-export default function DistanceTracker({targetLat, targetLon, updateInterval=5}) {
+export default function DistanceTracker({targetLat, targetLon, updateInterval=5, complete}) {
     const [userLat, setUserLat] = useState(null);
     const [userLon, setUserLon] = useState(null);
     const [distance, setDistance] = useState(null);
@@ -9,7 +9,6 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval=5}
     const [bearing, setBearing] = useState(null);
     const [error, setError] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
-    const [atLocation, setAtLocation] = useState(false);
     const intervalRef = useRef(null);
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -56,11 +55,15 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval=5}
                     const dist = calculateDistance(lat, lon, targetLat, targetLon);
                     const bear = calculateBearing(lat, lon, targetLat, targetLon);
                     setBearing(bear);
-                    setDistanceDelta((distance || dist) - dist)
+                    if (distance != null) {
+                        setDistanceDelta(distance - dist)
+                    }
                     setUserLat(lat);
                     setUserLon(lon);
                     setDistance(dist);
-                    setAtLocation(dist < 10)
+                    if (dist < 10) {
+                        complete()
+                    }
                     setLastUpdate(new Date());
                     setError(null);
                 },
@@ -105,37 +108,16 @@ export default function DistanceTracker({targetLat, targetLon, updateInterval=5}
                                 <p className="text-red-700 text-sm">{error}</p>
                             </div>
                         )}
-                        {distance !== null && (
+                        {distance !== null && bearing !== null && (
                             <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200">
                                 <p className="text-4xl font-bold text-green-700 mb-2">
-                                    {distance.toFixed(2)} m ({distanceDelta.toFixed(2)} m)
+                                    {distance.toFixed(2)} m  {getCompassDirection(bearing)} ({distanceDelta.toFixed(2)} m)
                                 </p>
                                 {lastUpdate && (
                                     <p className="text-xs text-gray-500 mt-3">
                                         Last updated: {lastUpdate.toLocaleTimeString()}
                                     </p>
                                 )}
-                            </div>
-                        )}
-                        {bearing !== null && (
-                            <div className="mt-4 pt-4 border-t border-green-200">
-                                <p className="text-sm text-gray-600 mb-1">Direction to target:</p>
-                                <p className="text-2xl font-bold text-green-700">
-                                    {getCompassDirection(bearing)} ({bearing.toFixed(1)}°)
-                                </p>
-                            </div>
-                        )}
-                        {atLocation && (
-                            <div className="mt-4 pt-4 border-t border-green-200">
-                                <p className="text-sm text-gray-600 mb-1">You have arrived</p>
-                            </div>
-                        )}
-                        {userLat && userLon && (
-                            <div className="bg-gray-50 rounded-xl p-4">
-                                <h3 className="text-sm font-semibold text-gray-600 mb-2">Your Location</h3>
-                                <p className="text-xs text-gray-500">
-                                    Lat: {userLat.toFixed(6)}, Lon: {userLon.toFixed(6)}
-                                </p>
                             </div>
                         )}
                     </div>
