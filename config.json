@@ -1,0 +1,20 @@
+{
+    "locations": [
+        {"note":"location_a", "code":"ABCD", "preMessage": "Can you complete the puzzle to unlock the next location", "postMessage": "Well done!"},
+        {"note":"location_b", "loc": [51.46088, -2.60198], "preMessage": "Can you find the next location?", "postMessage": "Why don't you start you lovely day with some lovely people and some lovely coffee"},
+        {"note":"location_c", "code":"EFGH", "preMessage": "Can you complete the puzzle to unlock the next location", "postMessage": "Well done!"},
+        {"note":"location_d", "loc": [51.45383, -2.59351], "preMessage": "Can you find the next location?", "postMessage": "Wowee, you found Koottaan! good job. We can go somewhere else if you prefer"},
+        {"note":"location_e", "code":"IJKL", "preMessage": "Can you complete the puzzle to unlock the next location", "postMessage": "Well done!"},
+        {"note":"location_f", "loc": [51.45537264984765, -2.6007150536210646], "preMessage": "Can you find the next location?", "postMessage": "Wow what a good job you did! Please enjoy some baklava or some gelato!"},
+        {"note":"location_g", "loc": [51.454126923918245, -2.606765962084629], "preMessage": "Can you find the next location?", "postMessage": "What great navigation! Feel free to go up the tower, I am not sure how bad the weather is going to be!"},
+        {"note":"location_h", "loc": [51.45393397795256, -2.618085111713265], "preMessage": "Can you find the next location?", "postMessage": "Mmmm, I think it is time for some more coffee and maybe some more pastry, what a day we are having!"},
+        {"note":"location_i", "code":"MNOP", "preMessage": "Can you complete the puzzle to unlock the next location", "postMessage": "Well done! That was a difficult one!"},
+        {"note":"location_j", "loc": [51.44701867771612, -2.6188495126163494], "preMessage": "Can you find the next location?", "postMessage": "There isn't actually anything here, but we needed to go around the water! Good job though, you did great!"},
+        {"note":"location_k", "loc": [51.44785291152335, -2.609854606277102], "preMessage": "Can you find the next location?", "postMessage": "Wow a real life Banksy, this was convenient on our little tour of Bristol wasn't it!"},
+        {"note":"location_l", "loc": [51.44774191274017, -2.5984101791261454], "preMessage": "Can you find the next location?", "postMessage": "I think you may have been here before but there wasn't many activities to do around here, so lets have a little look."},
+        {"note":"location_m", "loc": [51.44702219024122, -2.5993832902212892], "preMessage": "Can you find the next location?", "postMessage": "Fancy a pint and some puzzles with some friends?"},
+        {"note":"location_n", "code":"QRST", "preMessage": "Can you complete the puzzle to unlock the next location", "postMessage": "Well done! That was a difficult one!"},
+        {"note":"location_o", "loc": [51.44738075836584, -2.5982695863406846], "preMessage": "Can you find the next location for 19: 30?", "postMessage": "There is quite a few places around here so just to make it clear we have a booking at Magari!"},
+        {"note":"location_p", "loc": [51.45208334963061, -2.5932557314930547], "preMessage": "Can you find the next location?", "postMessage": "Fancy a pint and some live music?"}
+    ]
+}
